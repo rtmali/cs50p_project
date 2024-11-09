@@ -1,94 +1,108 @@
-# Rangefe
+# File Explorer
 
-## Overview
-
-The Rangefe is a terminal-based application inspired by Ranger File Manager, designed to provide users with a comprehensive and interactive interface for managing files and directories. Built using Python and the `curses` library, this tool allows users to navigate through their file system, preview files, and perform various file operations such as copying, moving, renaming, and deleting. The application supports a wide range of file types, offering previews for documents, spreadsheets, presentations, and more.
+A terminal-based file explorer inspired mainly by Range File Manager, built using Python and the `curses` library. This application allows users to navigate through directories, preview files, manage files (copy, move, delete, rename), and compress or decompress files. It provides a user-friendly interface for file management directly from the terminal, making it a powerful tool for users who prefer command-line operations.
 
 ## Video Demo:  <URL HERE>
 
 ## Features
 
-- **Navigation**: Use arrow keys or `h`, `j`, `k`, `l` for navigating through directories and files.
-- **File Operations**: Perform operations like copy, paste, move, rename, and delete files or directories.
-- **File Preview**: Preview content of various file types including `.txt`, `.pdf`, `.docx`, `.xlsx`, `.pptx`, and more.
-- **Directory Management**: Create new directories and navigate to specific paths.
-- **Search Functionality**: Search for files within the current directory.
-- **File Information**: View detailed information about files including permissions, type, size, and modification date.
-- **Help Screen**: Access a help screen with keyboard shortcuts for easy reference.
+- **Directory Navigation**: Easily navigate through directories using the keyboard. The application supports moving up to parent directories and entering subdirectories.
+- **File Management**: Perform various file operations such as creating, renaming, copying, moving, and deleting files and directories.
+- **File Preview**: Preview the contents of text-based files, including `.txt`, `.docx`, `.pdf`, and more, directly within the application.
+- **Search Functionality**: Quickly search for files by name, allowing for efficient file management in directories with many files.
+- **Compression and Decompression**: Compress files and directories into ZIP format and decompress ZIP and tar.gz files, making it easier to manage storage.
+- **Detailed File Information**: View detailed information about files, including permissions, size, type, and last modified date.
+
+## Requirements
+
+To run this application, you need:
+
+- **Python 3.x**: Ensure you have Python 3 installed on your system. You can download it from [python.org](https://www.python.org/downloads/).
+- **Required Python packages**: The application uses several external libraries. You can install the required packages using pip:
+
+```bash
+pip install python-docx pypdf odfpy pandas python-pptx
+```
+
+These libraries enable the application to handle various file types and operations efficiently.
 
 ## Installation
 
-To run the File Explorer, ensure you have Python installed on your system along with the necessary libraries. You can install the required libraries using pip:
+1. **Clone the Repository**: Start by cloning the repository to your local machine. Open your terminal and run:
 
 ```bash
-pip install python-docx PyPDF2 odfpy pandas python-pptx
+git clone https://github.com/rtmali/cs50p_project.git
 ```
+
+2. **Navigate to the Project Directory**: Change into the project directory:
+
+```bash
+cd cs50p_project/rangefe
+```
+
+3. **Install Required Packages**: Use pip to install the necessary Python packages as mentioned above.
 
 ## Usage
 
-Run the application using the following command:
+To run the file explorer, execute the following command in your terminal:
 
 ```bash
-python file_explorer.py
+python project.py
 ```
+
+Upon launching the application, you will be greeted with a user-friendly interface that displays the current directory's contents. You can navigate through files and directories using the keyboard shortcuts outlined below.
 
 ### Keyboard Shortcuts
 
-- **Navigation**:
-  - `Arrow Up / k`: Move up in the file list.
-  - `Arrow Down / j`: Move down in the file list.
-  - `Arrow Left / h`: Go to the parent directory.
-  - `Arrow Right / l`: Open the selected directory.
+The application is designed to be intuitive, with several keyboard shortcuts to enhance usability:
 
-- **File Operations**:
-  - `o`: Open the selected file with the default application.
-  - `p`: Preview the selected file.
-  - `d`: Delete the selected file or directory.
-  - `r`: Rename the selected file or directory.
-  - `n`: Create a new directory.
-  - `c`: Copy the selected file or directory.
-  - `v`: Paste the copied file or directory.
-  - `m`: Move the selected file or directory to a specified path.
+- **Arrow Up / Arrow Down**: Navigate through files and directories.
+- **Arrow Left**: Go to the parent directory.
+- **Arrow Right**: Open the selected directory.
+- **o**: Open the selected file with the default application associated with that file type.
+- **p**: Preview the contents of the selected file.
+- **d**: Delete the selected file or directory after confirmation.
+- **r**: Rename the selected file or directory.
+- **m**: Move the selected file or directory to a new location.
+- **n**: Create a new directory in the current location.
+- **f**: Find a file or directory by name.
+- **g**: Go to a specific directory by entering its path.
+- **i**: Show detailed information about the selected file.
+- **?**: Display a help screen with keyboard shortcuts.
+- **z**: Compress the selected file or directory into a ZIP file.
+- **e**: Decompress the selected ZIP or tar.gz file.
+- **q**: Quit the application.
 
-- **Additional Features**:
-  - `f`: Find a file or directory by name.
-  - `g`: Go to a specific directory path.
-  - `i`: Show detailed information about the selected file.
-  - `?`: Display the help screen with keyboard shortcuts.
-  - `q`: Quit the application.
+## Contributing
 
-## File Preview
+Contributions to this project are welcome! If you have suggestions for improvements, bug fixes, or new features, please feel free to submit a pull request. To contribute:
 
-The File Explorer supports previewing a variety of file types:
+1. Fork the repository.
+2. Create a new branch for your feature or bug fix.
+3. Make your changes and commit them with clear messages.
+4. Push your changes to your forked repository.
+5. Open a pull request to the main repository.
 
-- **Text Files**: `.txt`, `.md`, `.csv`, `.py`, etc.
-- **Documents**: `.docx`, `.odt`
-- **PDFs**: `.pdf`
-- **Spreadsheets**: `.xls`, `.xlsx`
-- **Presentations**: `.ppt`, `.pptx`
+## License
 
-For unsupported file types, a message indicating the lack of preview support is displayed.
+This project is licensed under the MIT License. You can view the full license text in the [LICENSE](LICENSE) file included in the repository. This allows you to use, modify, and distribute the software freely, provided that the original license is maintained.
 
-## Error Handling
+## Acknowledgments
 
-The application includes error handling for various operations. If an error occurs during file operations such as opening, deleting, or moving files, an error message is displayed at the top of the screen.
+- Special thanks to the developers of the libraries used in this project, including `python-docx`, `PyPDF2`, `odfpy`, `pandas`, and `python-pptx`, which enable the application to handle various file formats and operations.
+- Inspired by various terminal-based file managers, this project aims to provide a simple yet powerful tool for file management in a command-line environment.
 
-## Customization
+## Future Enhancements
 
-The application uses color pairs for different elements:
+While the current version of the File Explorer provides a robust set of features, there are always opportunities for improvement. Future enhancements may include:
 
-- **Directories**: Cyan
-- **Files**: White
-- **Status Messages**: Yellow
-- **Header**: Magenta
-
-These colors can be customized by modifying the `curses.init_pair` function calls in the `main` function.
-
-## Limitations
-
-- The application is designed for Unix-like systems and may require modifications to run on Windows.
-- File previews are limited to text extraction and may not fully represent the original formatting of complex documents.
+- Support for additional file formats for previewing.
+- Improved error handling and user feedback.
+- A more advanced search functionality that supports regular expressions.
+- Integration with cloud storage services for remote file management.
 
 ## Conclusion
 
-The File Explorer provides a powerful and flexible interface for managing files directly from the terminal. Its rich feature set and support for various file types make it a valuable tool for users who prefer working in a command-line environment. Whether you're navigating directories, previewing documents, or performing file operations, this application offers a comprehensive solution for your file management needs.
+The File Explorer is a powerful tool for users who prefer working in a terminal environment. With its comprehensive set of features, it simplifies file management tasks and enhances productivity. Whether you are a developer, system administrator, or casual user, this application can help you navigate and manage your files more efficiently.
+
+Feel free to explore the code, contribute, and make this project even better!
