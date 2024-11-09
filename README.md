@@ -1,4 +1,4 @@
-# File Explorer
+# Rangefe
 
 A terminal-based file explorer inspired mainly by Range File Manager, built using Python and the `curses` library. This application allows users to navigate through directories, preview files, manage files (copy, move, delete, rename), and compress or decompress files. It provides a user-friendly interface for file management directly from the terminal, making it a powerful tool for users who prefer command-line operations.
 
