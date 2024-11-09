@@ -6,7 +6,6 @@ import shutil
 import zipfile
 import tarfile
 
-# Add the directory containing project.py to the Python path
 sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 
 from project import FileExplorer  # Import the FileExplorer class from project.py
@@ -14,11 +13,9 @@ from project import FileExplorer  # Import the FileExplorer class from project.p
 class TestFileExplorer(unittest.TestCase):
     
     def setUp(self):
-        # Mock the curses module functions
         self.curses_patcher = patch('curses.initscr', return_value=MagicMock())
         self.curses_patcher.start()
 
-        # Mock other curses functions used in FileExplorer
         self.mock_curses = patch('curses.color_pair', return_value=1)
         self.mock_curses.start()
         self.mock_curses_newwin = patch('curses.newwin', return_value=MagicMock())
@@ -29,7 +26,6 @@ class TestFileExplorer(unittest.TestCase):
         self.explorer.current_path = os.getcwd()  # Set a known path for testing
 
     def tearDown(self):
-        # Stop the patchers for curses
         self.curses_patcher.stop()
         self.mock_curses.stop()
         self.mock_curses_newwin.stop()
