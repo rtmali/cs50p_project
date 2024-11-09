@@ -11,7 +11,7 @@ sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 from project import FileExplorer, load_current_directory, create_new_directory, delete_file  # Import the standalone functions
 
 class TestFileExplorer(unittest.TestCase):
-    
+
     def setUp(self):
         self.curses_patcher = patch('curses.initscr', return_value=MagicMock())
         self.curses_patcher.start()
@@ -23,14 +23,13 @@ class TestFileExplorer(unittest.TestCase):
 
         self.mock_stdscr = MagicMock()
         self.explorer = FileExplorer(self.mock_stdscr)
-        self.explorer.current_path = os.getcwd()  # Set a known path for testing
+        self.explorer.current_path = os.getcwd()
 
     def tearDown(self):
         self.curses_patcher.stop()
         self.mock_curses.stop()
         self.mock_curses_newwin.stop()
 
-    # Existing tests for FileExplorer class
     def test_human_readable_size(self):
         self.assertEqual(self.explorer.human_readable_size(1023), "1023.00 B")
         self.assertEqual(self.explorer.human_readable_size(1024), "1.00 KB")
@@ -39,8 +38,8 @@ class TestFileExplorer(unittest.TestCase):
     def test_get_file_info(self):
         with patch('os.stat') as mock_stat:
             mock_stat.return_value.st_size = 1024
-            mock_stat.return_value.st_mtime = 1609459200  # 2021-01-01 00:00:00
-            mock_stat.return_value.st_mode = 33279  # rwxrwxrwx permissions
+            mock_stat.return_value.st_mtime = 1609459200
+            mock_stat.return_value.st_mode = 33279
             info = self.explorer.get_file_info('test.txt')
             self.assertEqual(info, ('-rwxrwxrwx', '.txt', '1.00 KB', '2021-01-01 00:00:00'))
 
@@ -75,7 +74,7 @@ class TestFileExplorer(unittest.TestCase):
     def test_delete_file(self, mock_remove, mock_rmtree):
         self.explorer.file_list = ['file_to_delete.txt']
         self.explorer.current_selection = 0
-        # Create a dummy file to delete
+
         with open(os.path.join(self.explorer.current_path, 'file_to_delete.txt'), 'w') as f:
             f.write('dummy content')
 
@@ -84,7 +83,6 @@ class TestFileExplorer(unittest.TestCase):
             mock_remove.assert_called_once_with(os.path.join(self.explorer.current_path, 'file_to_delete.txt'))
 
     def test_delete_file_no_confirmation(self):
-        # Create a dummy file to test deletion
         with open(os.path.join(self.explorer.current_path, 'file_to_delete.txt'), 'w') as f:
             f.write('dummy content')
 
@@ -145,7 +143,6 @@ class TestFileExplorer(unittest.TestCase):
         self.assertIn('file1.txt', self.explorer.file_list)
         self.assertIn('file3.txt', self.explorer.file_list)
 
-# New tests for standalone functions
 class TestStandaloneFunctions(unittest.TestCase):
 
     @patch('os.listdir', return_value=['file1.txt', 'file2.txt'])
