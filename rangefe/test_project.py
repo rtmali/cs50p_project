@@ -1,14 +1,14 @@
 import os
 import sys
 import unittest
-from unittest.mock import patch, mock_open, MagicMock
+from unittest.mock import patch, MagicMock
 import shutil
 import zipfile
 import tarfile
 
 sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 
-from project import FileExplorer  # Import the FileExplorer class from project.py
+from project import FileExplorer, load_current_directory, create_new_directory, delete_file  # Import the standalone functions
 
 class TestFileExplorer(unittest.TestCase):
     
@@ -30,6 +30,7 @@ class TestFileExplorer(unittest.TestCase):
         self.mock_curses.stop()
         self.mock_curses_newwin.stop()
 
+    # Existing tests for FileExplorer class
     def test_human_readable_size(self):
         self.assertEqual(self.explorer.human_readable_size(1023), "1023.00 B")
         self.assertEqual(self.explorer.human_readable_size(1024), "1.00 KB")
@@ -143,6 +144,26 @@ class TestFileExplorer(unittest.TestCase):
         self.explorer.find()
         self.assertIn('file1.txt', self.explorer.file_list)
         self.assertIn('file3.txt', self.explorer.file_list)
+
+# New tests for standalone functions
+class TestStandaloneFunctions(unittest.TestCase):
+
+    @patch('os.listdir', return_value=['file1.txt', 'file2.txt'])
+    def test_load_current_directory(self, mock_listdir):
+        result = load_current_directory()
+        self.assertEqual(result, ['file1.txt', 'file2.txt'])
+
+    @patch('os.mkdir')
+    def test_create_new_directory(self, mock_mkdir):
+        create_new_directory('new_directory')
+        mock_mkdir.assert_called_once_with('new_directory')
+
+    @patch('os.remove')
+    def test_delete_file(self, mock_remove):
+        test_file = 'test_file.txt'
+        with patch('builtins.open', new_callable=MagicMock):
+            delete_file(test_file)
+            mock_remove.assert_called_once_with(test_file)
 
 if __name__ == '__main__':
     unittest.main()
