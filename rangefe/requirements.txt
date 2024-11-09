@@ -1,0 +1,7 @@
+curses
+python-docx
+PyPDF2
+odfpy
+shutil
+pandas
+python-pptx
