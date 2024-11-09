@@ -126,7 +126,8 @@ class FileExplorer:
             self.stdscr.addstr(max_y - 3, 0, info_str[:max_x - 1])
 
         self.stdscr.refresh()
-
+        
+    # With help from chatGPT
     def preview_file(self, filepath):
         self.pop_up_active = True
         max_y, max_x = self.stdscr.getmaxyx()
@@ -386,6 +387,7 @@ class FileExplorer:
         info_win.clear()
         info_win.refresh()
 
+    # With help from chatGPT
     def compress_files(self):
         """Compress the selected file or directory into a ZIP or tar.gz file."""
         selected_file = self.file_list[self.current_selection]
@@ -407,6 +409,7 @@ class FileExplorer:
             except Exception as e:
                 self.stdscr.addstr(0, 0, f"Error compressing: {str(e)}", curses.color_pair(3))
 
+    # With help from chatGPT
     def decompress_file(self):
         """Decompress the selected ZIP or tar.gz file."""
         selected_file = self.file_list[self.current_selection]
