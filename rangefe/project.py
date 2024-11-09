@@ -307,7 +307,7 @@ class FileExplorer:
                 self.stdscr.addstr(0, 0, f"Pasted: {dest_path}", curses.color_pair(3))
             except Exception as e:
                 self.stdscr.addstr(0, 0, f"Error pasting: {str(e)}", curses.color_pair(3))
-
+    
     def move_file(self):
         """Move the selected file or directory to the current directory."""
         if self.copied_file_path:
@@ -546,6 +546,18 @@ def main(stdscr):
 
     explorer = FileExplorer(stdscr)
     explorer.navigate()
+
+def load_current_directory():
+    """Load the current directory files."""
+    return os.listdir(os.getcwd())
+
+def create_new_directory(name):
+    """Create a new directory with the given name."""
+    os.mkdir(name)
+
+def delete_file(file_path):
+    """Delete the specified file."""
+    os.remove(file_path)
 
 if __name__ == '__main__':
     curses.wrapper(main)
