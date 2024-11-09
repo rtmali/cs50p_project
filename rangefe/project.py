@@ -3,7 +3,7 @@ import curses
 import subprocess
 from datetime import datetime
 import docx
-import pypdf  # Changed from PyPDF2 to pypdf
+import pypdf
 from odf.opendocument import load
 from odf.text import P
 import stat
@@ -17,7 +17,7 @@ class FileExplorer:
         self.current_path = os.getcwd()
         self.file_list = []
         self.current_selection = 0
-        self.selected_directory_contents = [] 
+        self.selected_directory_contents = []
         self.file_info = ("", "", "", "")
         self.pop_up_active = False
         self.copied_file_path = None
@@ -50,7 +50,7 @@ class FileExplorer:
             size = self.human_readable_size(stat_info.st_size)
             mtime = datetime.fromtimestamp(stat_info.st_mtime).strftime('%Y-%m-%d %H:%M:%S')
             file_type = 'Directory' if os.path.isdir(full_path) else os.path.splitext(filename)[1] or 'N/A'
-            
+
             permissions = stat.filemode(stat_info.st_mode)
 
             return permissions, file_type, size, mtime
@@ -60,11 +60,11 @@ class FileExplorer:
     def display_file_list(self):
         self.load_files()
         max_y, max_x = self.stdscr.getmaxyx()
-    
+
         left_col_width = max_x // 3
         center_col_width = max_x // 3
         right_col_width = max_x // 3
-    
+
         self.stdscr.clear()
 
         username = os.getenv("USER") or os.getenv("USERNAME")
@@ -79,7 +79,7 @@ class FileExplorer:
 
         parent_dirs = [d for d in os.listdir(os.path.dirname(self.current_path)) if os.path.isdir(os.path.join(os.path.dirname(self.current_path), d))]
         for index, dirname in enumerate(parent_dirs):
-            if index >= max_y - 6:  # Limit the display to available space
+            if index >= max_y - 6:
                 break
             display_str = f"[+] {dirname}"
             if dirname == os.path.basename(self.current_path):
@@ -90,7 +90,7 @@ class FileExplorer:
         self.stdscr.addstr(1, left_col_width, '-' * (center_col_width - 1) + '\n')
         self.stdscr.addstr(2, left_col_width, "Current Directory Files")
         self.stdscr.addstr(3, left_col_width, '-' * (center_col_width - 1) + '\n')
-    
+
         for index, filename in enumerate(self.file_list):
             if index >= max_y - 6:
                 break
@@ -115,7 +115,7 @@ class FileExplorer:
         self.stdscr.addstr(3, left_col_width + center_col_width, '-' * (right_col_width - 1) + '\n')
 
         for index, filename in enumerate(self.selected_directory_contents):
-            if index >= max_y - 6: 
+            if index >= max_y - 6:
                 break
             self.stdscr.addstr(4 + index, left_col_width + center_col_width, filename)
 
@@ -123,16 +123,16 @@ class FileExplorer:
         if selected_file:
             self.file_info = self.get_file_info(selected_file)
             info_str = f"Permissions: {self.file_info[0]} | Type: {self.file_info[1]} | Size: {self.file_info[2]} | Modified: {self.file_info[3]}"
-            self.stdscr.addstr(max_y - 3, 0, info_str[:max_x - 1])  
+            self.stdscr.addstr(max_y - 3, 0, info_str[:max_x - 1])
 
         self.stdscr.refresh()
 
     def preview_file(self, filepath):
         self.pop_up_active = True
         max_y, max_x = self.stdscr.getmaxyx()
-        preview_win = curses.newwin(max_y - 2, max_x - 2, 1, 1) 
+        preview_win = curses.newwin(max_y - 2, max_x - 2, 1, 1)
         preview_win.border(0)
-    
+
         lines = []
         try:
             if filepath.lower().endswith('.doc'):
@@ -146,7 +146,7 @@ class FileExplorer:
             elif filepath.lower().endswith('.odt'):
                 try:
                     doc = load(filepath)
-                
+
                     lines = []
 
                     paragraphs = doc.getElementsByType(P)
@@ -162,7 +162,7 @@ class FileExplorer:
 
             elif filepath.lower().endswith('.pdf'):
                 with open(filepath, 'rb') as f:
-                    reader = pypdf.PdfReader(f)  # Changed from PyPDF2 to pypdf
+                    reader = pypdf.PdfReader(f)
                     for page in reader.pages:
                         text = page.extract_text()
                         if text:
@@ -183,25 +183,25 @@ class FileExplorer:
                     lines = f.readlines()
             else:
                 lines = ["Unsupported file type for preview."]
-    
+
         except Exception as e:
             lines = [f"Error reading file: {str(e)}"]
-    
+
         for i, line in enumerate(lines[:max_y - 4]):
             preview_win.addstr(i + 1, 1, line[:max_x - 3])
-    
+
         preview_win.addstr(max_y - 3, 1, "Press ESC to close preview...")
-    
+
         preview_win.refresh()
         while True:
             key = preview_win.getch()
             if key == 27:
                 break
-    
+
         preview_win.clear()
         preview_win.refresh()
         self.pop_up_active = False
-    
+
     def delete_file(self):
         """Prompt to delete the selected file or directory."""
         selected_file = self.file_list[self.current_selection]
@@ -210,7 +210,7 @@ class FileExplorer:
             confirm = self.prompt_confirmation(f"Delete directory {selected_file} and all its contents? (y/n)")
         else:
             confirm = self.prompt_confirmation(f"Delete file {selected_file}? (y/n)")
-    
+
         if confirm == 'y':
             try:
                 if os.path.isdir(full_path):
@@ -260,15 +260,15 @@ class FileExplorer:
             except Exception as e:
                 self.stdscr.addstr(0, 0, f"Error creating directory: {str(e)}", curses.color_pair(3))
 
-    
+
     def prompt_input(self, message):
         """Display an input prompt and return the user input."""
         input_str = ""
-        max_length = 20 
+        max_length = 20
 
         while True:
             max_y, max_x = self.stdscr.getmaxyx()
-            window_width = max(len(message) + len(input_str) + 3, max_length)  # Dynamic width
+            window_width = max(len(message) + len(input_str) + 3, max_length)
             input_win = curses.newwin(3, window_width, max_y // 2, (max_x - window_width) // 2)
             input_win.border(0)
             input_win.addstr(1, 1, message)
@@ -278,8 +278,8 @@ class FileExplorer:
             key = input_win.getch()
             if key in (curses.KEY_ENTER, 10, 13):
                 break
-            elif key == 27: 
-                return None 
+            elif key == 27:
+                return None
             elif key == curses.KEY_BACKSPACE or key == 127:
                 input_str = input_str[:-1]
             else:
@@ -307,7 +307,7 @@ class FileExplorer:
                 self.stdscr.addstr(0, 0, f"Pasted: {dest_path}", curses.color_pair(3))
             except Exception as e:
                 self.stdscr.addstr(0, 0, f"Error pasting: {str(e)}", curses.color_pair(3))
-    
+
     def move_file(self):
         """Move the selected file or directory to the current directory."""
         if self.copied_file_path:
@@ -318,7 +318,7 @@ class FileExplorer:
                 self.copied_file_path = None
             except Exception as e:
                 self.stdscr.addstr(0, 0, f"Error moving: {str(e)}", curses.color_pair(3))
-    
+
     def move_file_with_input(self):
         """Prompt the user for a destination path to move the selected file or directory."""
         destination_path = self.prompt_input("Enter destination path: ")
@@ -328,12 +328,12 @@ class FileExplorer:
                     dest_full_path = os.path.join(destination_path, os.path.basename(self.copied_file_path))
                     shutil.move(self.copied_file_path, dest_full_path)
                     self.stdscr.addstr(0, 0, f"Moved: {dest_full_path}", curses.color_pair(3))
-                    self.copied_file_path = None 
+                    self.copied_file_path = None
                 except Exception as e:
                     self.stdscr.addstr(0, 0, f"Error moving: {str(e)}", curses.color_pair(3))
         else:
             self.stdscr.addstr(0, 0, "Invalid destination path.", curses.color_pair(3))
-  
+
     def find(self):
         """Search for files matching a given name."""
         search_term = self.prompt_input("Enter filename to search: ")
@@ -353,9 +353,9 @@ class FileExplorer:
         path = self.prompt_input("Enter directory path: ")
         if path and os.path.isdir(path):
             self.current_path = path
-            self.current_selection = 0 
+            self.current_selection = 0
         else:
-            self.stdscr.addstr(0, 0, "Invalid directory path.", curses.color_pair(3))    
+            self.stdscr.addstr(0, 0, "Invalid directory path.", curses.color_pair(3))
 
     def show_file_info(self):
         """Show detailed info about the selected file."""
@@ -368,30 +368,30 @@ class FileExplorer:
         info_str += f"Type: {info[1]}\n"
         info_str += f"Size: {info[2]}\n"
         info_str += f"Modified: {info[3]}"
-        
+
         max_y, max_x = self.stdscr.getmaxyx()
         info_win = curses.newwin(max_y - 2, max_x - 2, 1, 1)
         info_win.border(0)
         for i, line in enumerate(info_str.splitlines()):
             if i < max_y - 4:
                 info_win.addstr(i + 1, 1, line)
-        
+
         info_win.addstr(max_y - 3, 1, "Press ESC to close...")
         info_win.refresh()
         while True:
             key = info_win.getch()
             if key == 27:
                 break
-    
+
         info_win.clear()
         info_win.refresh()
-    
+
     def compress_files(self):
         """Compress the selected file or directory into a ZIP or tar.gz file."""
         selected_file = self.file_list[self.current_selection]
         full_path = os.path.join(self.current_path, selected_file)
         output_name = self.prompt_input("Enter name for the compressed file (without extension): ")
-        
+
         if output_name:
             zip_path = os.path.join(self.current_path, f"{output_name}.zip")
             try:
@@ -411,7 +411,7 @@ class FileExplorer:
         """Decompress the selected ZIP or tar.gz file."""
         selected_file = self.file_list[self.current_selection]
         full_path = os.path.join(self.current_path, selected_file)
-    
+
         if selected_file.endswith('.zip'):
             try:
                 with zipfile.ZipFile(full_path, 'r') as zipf:
@@ -435,17 +435,15 @@ class FileExplorer:
             if not self.pop_up_active:
                 self.display_file_list()
                 key = self.stdscr.getch()
-                # Up and Down navigation
                 if key in (curses.KEY_UP, ord('k')) and self.current_selection > 0:
                     self.current_selection -= 1
                 elif key in (curses.KEY_DOWN, ord('j')) and self.current_selection < len(self.file_list) - 1:
                     self.current_selection += 1
-                # Left and Right navigation
                 elif key in (curses.KEY_LEFT, ord('h')):
                     self.current_path = os.path.dirname(self.current_path)
                     self.current_selection = 0
                 elif key in (curses.KEY_RIGHT, ord('l')):
-                    if self.file_list:  
+                    if self.file_list:
                         selected_file = self.file_list[self.current_selection]
                         full_path = os.path.join(self.current_path, selected_file)
                         if os.path.isdir(full_path):
@@ -515,7 +513,7 @@ class FileExplorer:
             "e: Decompress file",
             "q: Quit"
         ]
-        
+
         max_y, max_x = self.stdscr.getmaxyx()
         help_win = curses.newwin(max_y - 2, max_x - 2, 1, 1)
         help_win.border(0)
@@ -528,16 +526,16 @@ class FileExplorer:
 
         help_win.refresh()
         while True:
-            key = help_win.getch() 
+            key = help_win.getch()
             if key == 27:
                 break
 
         help_win.clear()
         help_win.refresh()
-        self.pop_up_active = False 
+        self.pop_up_active = False
 
 def main(stdscr):
-    curses.curs_set(0)  # Hide the cursor
+    curses.curs_set(0)
     curses.start_color()
     curses.init_pair(1, curses.COLOR_CYAN, curses.COLOR_BLACK)
     curses.init_pair(2, curses.COLOR_WHITE, curses.COLOR_BLACK)
