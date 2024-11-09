@@ -1,8 +1,8 @@
-# File Explorer
+# Rangefe
 
 ## Overview
 
-The File Explorer is a terminal-based application designed to provide users with a comprehensive and interactive interface for managing files and directories. Built using Python and the `curses` library, this tool allows users to navigate through their file system, preview files, and perform various file operations such as copying, moving, renaming, and deleting. The application supports a wide range of file types, offering previews for documents, spreadsheets, presentations, and more.
+The Rangefe is a terminal-based application inspired by Ranger File Manager, designed to provide users with a comprehensive and interactive interface for managing files and directories. Built using Python and the `curses` library, this tool allows users to navigate through their file system, preview files, and perform various file operations such as copying, moving, renaming, and deleting. The application supports a wide range of file types, offering previews for documents, spreadsheets, presentations, and more.
 
 ## Video Demo:  <URL HERE>
 
